@@ -1,6 +1,6 @@
 # Clai DS — Design System Aplikasi Musik Clai
 
-**Versi:** 3.0 — 23 Oktober 2026. **Warna dikembalikan ke v1.0 "Volt"** atas vonis pemilik (palet Senja v2.0 "bikin pusing dan sakit mata"); struktur player-first, ikon SVG, dan daftar anti-slop dari v2.0 dipertahankan penuh. Yang dibuang dari v2 hanyalah dunianya (arang cokelat + amber), bukan rancangannya.
+**Versi:** 3.1 — 23 Oktober 2026 (audit Phase 4: DS diverifikasi berdampingan vs Spotube & matriks missing-states Phase 2 — lihat Bab 10; perubahan komponen: ContextSheet bervarian konteks, Player + tombol suka & slot status, Antrian + ringkasan & saring, keadaan sebagian/offline/sumber-terdegradasi di 6.12). Versi sebelumnya: 3.0 — **warna dikembalikan ke v1.0 "Volt"** atas vonis pemilik (palet Senja v2.0 "bikin pusing dan sakit mata"); struktur player-first, ikon SVG, dan daftar anti-slop dari v2.0 dipertahankan penuh. Yang dibuang dari v2 hanyalah dunianya (arang cokelat + amber), bukan rancangannya.
 **Induk:** `SPESIFIKASI-PRODUK.md` Bab 7. Sumber kebenaran visual; papan visual pendamping: `design-board.html`.
 **Metode:** dibangun ulang memakai skill **impeccable** (pbakaus/impeccable, Apache-2.0, terpasang di `~/workspace/custom-skills/impeccable/`) — khususnya `reference/craft-floor.md` (lantai kualitas + daftar tolak AI-slop), `reference/new-work.md`, dan `reference/android.md`. Standar pemilik yang sudah dikunci (spring physics) adalah brief yang menang bila bertabrakan dengan saran umum skill.
 **Identitas:** nama kerja **Clai**, dunia visual **"Volt"** (v1, dipulihkan). Logo & ikon digambar sendiri. Dilarang memakai/meniru logo, ikon, atau aset Spotify/Spotube.
@@ -87,7 +87,7 @@ Pengaturan sistem "hapus animasi" dihormati: spring → crossfade 80 ms, marquee
 ## 6. Komponen Baku
 
 ### 6.1 Baris Lagu (SongRow)
-[sampul 48] [judul body/500 + artis caption secondary] [durasi tabular] [⋯ SVG 48dp]. Keadaan: normal; **sedang diputar** (judul accent + ekualiser 3 batang di sudut sampul); ditekan (surface-2); tidak tersedia (faint + keterangan). Menu ⋯ = ContextSheet (6.6), isinya sama di semua layar.
+[sampul 48] [judul body/500 + artis caption secondary] [durasi tabular] [⋯ SVG 48dp]. Keadaan: normal; **sedang diputar** (judul accent + ekualiser 3 batang di sudut sampul); ditekan (surface-2); tidak tersedia (faint + keterangan). Menu ⋯ = ContextSheet (6.8), urutan aksinya sama di semua layar; varian konteks diatur di 6.8.
 
 ### 6.2 Kartu Sedang Diputar (NowCard) — komponen tanda tangan Beranda
 Blok surface-2 radius 16, TANPA garis tepi: sampul 96 kiri; kanan: judul headline, artis caption, garis progres 3dp accent + waktu tabular, deret kontrol ringkas (prev, PlayButton 48, next, hati). Mengetuk badan kartu membuka Player. Inilah hal pertama yang dilihat pengguna membuka aplikasi — bukan rak.
@@ -109,12 +109,14 @@ Tinggi 64 mengambang di atas nav (jarak 8), radius 12, surface-2 + bayangan tung
 
 ### 6.8 Lembar Menu Konteks (ContextSheet)
 Material bottom sheet: radius 20 atas, pegangan seret, kepala konteks (sampul+judul+artis), aksi berikon SVG 24 + label, baris 52. Urutan baku: Putar Berikutnya · Tambah ke Antrian · Mulai Radio Lagu · Simpan ke Koleksi · Tambah ke Playlist · Unduh (F2) · Buka Album · Buka Artis · Bagikan.
+**Varian konteks (audit Phase 4):** urutan baku tidak berubah antar layar; yang berubah hanya tambahan di ujung. Dari layar Antrian, lembar menambah **Hapus dari Antrian** sebagai aksi terakhir berwarna `state/error`. Aksi destruktif apa pun selalu: (a) posisi terakhir, (b) warna error + kata kerja eksplisit, (c) tidak pernah menjadi aksi pertama. Maksimal 10 baris aksi per lembar — lebih dari itu, kelompokkan ke sub-lembar, jangan memanjangkan daftar. (Pembanding: lembar Spotube dari antrean tidak punya Putar Berikutnya/Tambah ke Antrian sama sekali — dua aksi yang justru paling dibutuhkan di layar itu; lihat Bab 10.)
 
 ### 6.9 Player (NowPlaying) — tipografi memimpin
-Komposisi rata kiri (bukan simetris tengah): baris atas (tutup SVG, nama konteks sebagai teks caption biasa, menu) · sampul 176 rata kiri radius 16 · judul lagu **display 28 Space Grotesk** hingga 2 baris · artis headline secondary · seek + waktu tabular · deret kontrol: shuffle SVG · prev · **PlayButton 64** · next · repeat (aktif = accent + titik 4dp; repeat-satu + lencana "1") · deret bawah: Lirik · Antrian · Perangkat (F3) sebagai tombol teks berikon SVG.
+Komposisi rata kiri (bukan simetris tengah): baris atas (tutup SVG, nama konteks sebagai teks caption biasa, menu) · sampul 176 rata kiri radius 16 · blok judul: judul lagu **display 28 Space Grotesk** hingga 2 baris + artis headline secondary, dengan **tombol suka (hati SVG 48dp) sejajar kanan blok judul** — suka harus bisa dari Player (PRD 5.6); terisi = `state/liked` · slot status caption di bawah seek (muncul hanya saat buffering > 5 dtk / pemulihan / offline-terbatas, teks `type/caption`, tidak pernah menggeser kontrol) · seek + waktu tabular · deret kontrol: shuffle SVG · prev · **PlayButton 64** · next · repeat (aktif = accent + titik 4dp; repeat-satu + lencana "1") · deret bawah: Lirik · Antrian · Timer Tidur (F2) · Perangkat (F3) sebagai tombol teks berikon SVG berlabel — dilarang deret ikon tanpa label (pembanding Spotube memakai 4 ikon sekunder tanpa label yang ambigu; Bab 10).
 
-### 6.10 Baris Antrian (QueueRow)
-SongRow + pegangan seret SVG (6 titik) di kanan; seksi dibedakan label micro fungsional: "SEDANG DIPUTAR" / "BERIKUTNYA" / "LANJUTAN — [konteks]" / "PUTAR OTOMATIS — KARENA KAMU MEMUTAR [judul]". Seksi Putar Otomatis: kepala seksi + sakelar Material (matikan untuk sesi ini); barisnya berjudul `ink/secondary` + lencana mikro "AUTO" accent; tanpa pegangan seret, geser-hapus tetap bisa.
+### 6.10 Baris Antrian (QueueRow) & Kepala Antrian
+Di bawah judul layar Antrian selalu ada **baris ringkasan**: "[n] trek · [total durasi]" (`type/caption`, angka tabular) — pengguna antrean panjang harus tahu skala antreannya tanpa menggulir (pembanding Spotube menaruh hitungan ini di judul; yang tidak ditiru adalah daftar datarnya). Bila total antrean efektif > 50 trek, muncul **kolom saring antrean** (mencari di dalam antrean, tidak mengubah urutan) di bawah ringkasan.
+SongRow + pegangan seret SVG (6 titik) di kanan; seksi dibedakan label micro fungsional: "SEDANG DIPUTAR" / "BERIKUTNYA" / "LANJUTAN — [konteks]" / "PUTAR OTOMATIS — KARENA KAMU MEMUTAR [judul]". Seksi Putar Otomatis: kepala seksi + sakelar Material (matikan untuk sesi ini) + **slot status seksi** di kanan kepala (teks caption): "sambungan tertunda" (isi ulang gagal) atau "terbatas — offline" (L-11); barisnya berjudul `ink/secondary` + lencana mikro "AUTO" accent; tanpa pegangan seret, geser-hapus tetap bisa. Durasi baris selalu dari metadata; metadata belum termuat tampil sebagai "–", **tidak pernah "0:00"** (kejujuran status; pembanding Spotube menampilkan 0:00 di semua baris).
 
 ### 6.11 Navigasi Bawah (BottomNav)
 4 tujuan: Beranda · Cari · Koleksi · Statistik (F3). Ikon SVG garis 1,8 (digambar sendiri, satu gaya), label micro; aktif = ink/primary + titik accent 4dp; latar bg/base 94%.
@@ -123,6 +125,9 @@ SongRow + pegangan seret SVG (6 titik) di kanan; seksi dibedakan label micro fun
 - **Skeleton:** blok surface-2 berdenyut (opacity 0,6↔1, 1200 ms) seukuran konten akhir — bukan spinner layar penuh; animasi berhenti di luar layar.
 - **Kosong:** ikon besar redup + satu kalimat + **satu** tombol aksi jelas.
 - **Gagal:** pesan di tempat aksi terjadi + "Coba lagi" di posisi sama; lagu gagal dilewati dengan pemberitahuan menyebut judulnya (spec produk 5.4); umpan balik sesaat memakai **snackbar** Material.
+- **Sebagian (partial):** kegagalan per seksi tidak menjatuhkan layar — seksi yang gagal tampil sebagai baris penanda di tempatnya (ikon peringatan SVG + teks + "Coba lagi" seksi itu), seksi lain normal. Berlaku untuk rak Beranda, kategori Hasil Cari, dan isi ulang Putar Otomatis (matriks Phase 2 Bab 5).
+- **Offline:** saat perangkat offline, muncul **bilah penanda offline** ramping (surface-2, ikon peringatan redup + teks "Kamu offline — menampilkan unduhan & file lokal") menempel di atas Mini Player, dan hilang sendiri saat koneksi pulih. Offline adalah keadaan yang dinyatakan, bukan kesalahan (Phase 2 Bab 6).
+- **Sumber terdegradasi:** berbeda dari gagal jaringan — penanda memakai `state/warning` dan teks "Sumber sedang bermasalah" (Blueprint 5.5), muncul sebagai bilah yang sama dengan bilah offline agar pengguna belajar satu tempat untuk status konektivitas/sumber.
 - **FAB:** maksimal satu per layar, hanya aksi primer layar itu (mis. "+" buat playlist di Koleksi).
 
 ### 6.13 Ikon
@@ -152,4 +157,19 @@ Set vektor SVG digambar sendiri, kotak 24, garis 1,8, ujung membulat: putar, jed
 
 ## 9. Keterlacakan
 
-Token = konstanta kode (satu berkas token). Mengubah token/identitas = ubah dokumen ini → kode → papan visual. Riwayat: v1.0 "Volt" (#B8F135, rak ala Spotify) dinilai mirip Spotube oleh pemilik 23 Okt 2026; v2.0 "Senja" (arang cokelat + amber, player-first) DITOLAK pemilik di hari yang sama — "warna ini bikin pusing dan sakit mata", v1 dinilai lebih bagus; v3.0 ini memulihkan palet Volt v1.0 dan mempertahankan seluruh rancangan struktural v2.0 (player-first, NowCard, ikon SVG, anti-slop). Pelajaran tetap: kenyamanan mata pemilik mengalahkan keunikan hue.
+Token = konstanta kode (satu berkas token). Mengubah token/identitas = ubah dokumen ini → kode → papan visual. Riwayat: v1.0 "Volt" (#B8F135, rak ala Spotify) dinilai mirip Spotube oleh pemilik 23 Okt 2026; v2.0 "Senja" (arang cokelat + amber, player-first) DITOLAK pemilik di hari yang sama — "warna ini bikin pusing dan sakit mata", v1 dinilai lebih bagus; v3.0 memulihkan palet Volt v1.0 dan mempertahankan seluruh rancangan struktural v2.0 (player-first, NowCard, ikon SVG, anti-slop); **v3.1** = hasil audit Phase 4 (Bab 10). Pelajaran tetap: kenyamanan mata pemilik mengalahkan keunikan hue.
+
+---
+
+## 10. Audit Phase 4 — DS v3.0 vs Spotube (bukti: `referensi-spotube/01–04`)
+
+Kriteria tertulis (ditetapkan sebelum audit): **K1** ketuk untuk tugas utama · **K2** kejujuran status (tidak ada data palsu/kosong yang menyamar) · **K3** struktur antrean (bagian & asal-usul terlihat) · **K4** kelengkapan menu konteks untuk konteks layarnya · **K5** keterbacaan tanpa menebak (label, bukan ikon ambigu).
+
+| Layar | Temuan Spotube (bukti) | Posisi DS Clai | Vonis |
+|---|---|---|---|
+| Antrian | Daftar datar 356 trek tanpa seksi; semua durasi "0:00"; pegangan seret di kiri menabrak pola geser sistem | Seksi L-02 + label asal-usul; durasi "–" bila belum termuat, tidak pernah 0:00 (6.10) | Clai menang K2, K3. **Celah Clai yang ditutup di v3.1:** ringkasan jumlah/durasi & saring antrean > 50 (diadopsi dari Spotube, yang memang menaruh hitungan trek di judul) |
+| Menu konteks (dari antrean) | 9 aksi tetapi **tanpa Putar Berikutnya & Tambah ke Antrian**; aksi destruktif merah di tengah daftar | Urutan baku dimulai dua aksi antrean itu; destruktif terakhir & berwarna error (6.8) | Clai menang K1, K4. **Celah ditutup:** varian konteks antrean kini eksplisit di 6.8 |
+| Player | Sampul raksasa simetris-tengah; deret 4 ikon sekunder **tanpa label** (ambigu); slider volume menyita ruang; label format mentah "mp4 · 256kbps" | Tipografi memimpin, rata kiri; aksi bawah berlabel teks (6.9) | Clai menang K5. **Celah ditutup:** tombol suka di Player (ada di Spotube, absen di DS v3.0 — padahal PRD 5.6 mewajibkannya) + slot status buffering |
+| Beranda | Rak geser rekomendasi meniru toko; logo Spotify bocor di sampul; tanpa kartu pemutar — status putar hanya di mini bar | Player-first: NowCard pertama, rak penemuan dipindah ke Cari | Clai menang K1 (putar/jeda dari layar pertama tanpa membuka Player), K3. Mini Player Spotube punya prev; Clai memakai geser — diterima sadar: target mini dipertahankan 2 tombol agar tidak sempit, dicatat sebagai trade-off |
+
+**Cek terhadap matriks missing-states Phase 2:** DS v3.0 menutup skeleton/kosong/gagal/snackbar, tetapi belum menutup *sebagian*, *offline ternyatakan*, *sumber terdegradasi*, dan *status seksi Putar Otomatis* — keempatnya ditambahkan di 6.10/6.12 pada v3.1. Dengan itu seluruh sel matriks Bab 5 Phase 2 memiliki perlakuan visual yang ditetapkan. Tidak ada perubahan token warna/tipografi/motion pada v3.1 — yang berubah hanya kelengkapan komponen & keadaan.
