@@ -1,5 +1,7 @@
 # Clai
 
+<p align="center"><img src="assets/logo/clai-mark-512.png" width="128" alt="Logo Clai"></p>
+
 **Pemutar musik streaming Android, open source.** Player-first, tanpa iklan, tanpa akun wajib — seluruh data pribadi (koleksi, riwayat, statistik) tinggal di perangkat pengguna.
 
 Clai dibangun dengan metode *clean-room*: perilakunya dirancang dari spesifikasi terbuka dan hasil riset produk, tanpa memakai kode, ikon, logo, atau aset milik pemutar mana pun.
