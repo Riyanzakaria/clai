@@ -37,3 +37,12 @@ Lirik (F2), unduhan & mode offline penuh (F2 — skema `download_items` sudah di
 ## 3. Urutan eksekusi
 
 T-01 → T-02/T-03 → T-04/T-05 → T-06/T-07 → T-08/T-09 → T-10 → T-11/T-12 → T-13 → T-14 → T-15 → T-16 → T-17. Uji (T-16) ditulis bersama tugasnya masing-masing, dijalankan penuh di gerbang akhir.
+
+---
+
+## 4. Catatan Eksekusi (ditulis sesudah lari pertama, 23 Okt 2026)
+
+- **Mesin bangun:** PC DESKTOP-O97OFQO (mandat 03:45). Instalasi toolchain awal diam-diam gagal sebagian (jebakan spasi-ekor `set` pada cmd merusak JAVA_HOME → sdkmanager tidak memasang paket); diperbaiki manual & terverifikasi di disk: JDK 17 di `tools\jdk`, Flutter 3.47.7, SDK platform 34/35 (+36 & CMake terpasang otomatis oleh AGP), build-tools 35.0.0.
+- **NDK tidak dipakai:** baris `ndkVersion = flutter.ndkVersion` di `android/app/build.gradle.kts` dilepas — tidak ada kode native yang dibangun dari sumber di F1; dengan baris itu AGP mengunduh NDK r28c (±1 GB) tanpa kebutuhan nyata. Build lulus tanpanya.
+- **on_audio_query dibuang (deviasi dari T-12):** plugin versi 2.9.0 tidak memiliki `namespace` yang diwajibkan AGP 9 → konfigurasi Gradle gagal total. Diganti MethodChannel Kotlin sendiri ke MediaStore (`MainActivity.kt`, kanal `clai/local_audio`) — perilaku F-11 sama, dependensi tak-terawat hilang.
+- **Gerbang T-17 (lari pertama):** `flutter analyze` 0 error/0 warning (11 info); `flutter test` 16/16 lulus; `flutter build apk --debug` EXIT 0 — APK 169.864.706 byte, paket `com.riyanzakaria.clai`, label "Clai" (aapt2 terverifikasi). APK menunggu pemeriksaan pemilik (titik berhenti resmi).
