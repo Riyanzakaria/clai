@@ -43,4 +43,4 @@ Flutter + ExoPlayer (via `just_audio`/`audio_service`), Android 10+, arsitektur 
 
 ## Lisensi
 
-Lisensi open source akan ditetapkan sebelum rilis publik pertama dan dicatat di berkas ini.
+[GNU General Public License v3.0](LICENSE) — siapa pun boleh memakai, mempelajari, dan mengubah Clai; setiap turunan yang disebarkan wajib tetap open source dengan lisensi yang sama.
