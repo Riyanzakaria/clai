@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clai DS v3.1 “Volt” — Papan Visual</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --base:#0A0A0E; --s1:#121218; --s2:#1B1B23; --s3:#26262F;
+  --ink:#F4F6F1; --ink2:#A8AEA4; --faint:#62665F;
+  --accent:#B8F135; --on-accent:#10130A; --pressed:#9BD62A;
+  --liked:#FF5C7A; --error:#FF6B5E; --warn:#FFB224;
+  --divider:rgba(244,246,241,.08);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--base);color:var(--ink);font-family:Inter,Roboto,Arial,sans-serif;padding:32px 16px 64px}
+.wrap{max-width:1180px;margin:0 auto}
+.disp{font-family:"Space Grotesk",Inter,sans-serif}
+h1{font-family:"Space Grotesk",Inter,sans-serif;font-size:30px;line-height:36px;font-weight:600}
+h2{font-family:"Space Grotesk",Inter,sans-serif;font-size:22px;line-height:28px;font-weight:600;margin:52px 0 6px}
+.sub{color:var(--ink2);font-size:15px;line-height:22px;max-width:760px}
+.micro{font-size:11px;line-height:14px;font-weight:600;letter-spacing:.6px;text-transform:uppercase;color:var(--faint)}
+.note{color:var(--faint);font-size:13px;margin-top:8px;line-height:18px}
+header{display:flex;gap:16px;align-items:center}
+.logo{width:56px;height:56px;border-radius:14px;background:var(--s2);display:flex;align-items:flex-end;justify-content:center;gap:4px;padding-bottom:14px}
+.logo i{display:block;width:6px;background:var(--accent);border-radius:3px}
+.logo i:nth-child(1){height:14px}.logo i:nth-child(2){height:26px}.logo i:nth-child(3){height:18px}.logo i:nth-child(4){height:10px}
+.grid{display:grid;gap:12px}
+.swatches{grid-template-columns:repeat(auto-fill,minmax(160px,1fr));margin-top:16px}
+.sw{border-radius:12px;padding:12px;min-height:92px;display:flex;flex-direction:column;justify-content:flex-end}
+.sw b{font-size:13px}.sw span{font-size:12px;opacity:.78;font-variant-numeric:tabular-nums}
+.typebox{background:var(--s1);border-radius:12px;padding:20px;margin-top:16px;display:grid;gap:14px}
+.t-display{font-family:"Space Grotesk",Inter,sans-serif;font-size:28px;line-height:34px;font-weight:600}
+.t-title{font-family:"Space Grotesk",Inter,sans-serif;font-size:20px;line-height:26px;font-weight:600}
+.t-head{font-size:17px;line-height:23px;font-weight:600}
+.t-body{font-size:15px;line-height:21px}
+.t-cap{font-size:13px;line-height:18px;color:var(--ink2)}
+.t-time{font-size:12px;line-height:16px;font-weight:500;font-variant-numeric:tabular-nums;color:var(--ink2)}
+.rowlabel{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.rowlabel .micro{white-space:nowrap}
+.spacebars{display:flex;align-items:flex-end;gap:18px;margin-top:16px;background:var(--s1);border-radius:12px;padding:20px;flex-wrap:wrap}
+.spacebars figure{text-align:center}
+.spacebars .bar{background:var(--accent);border-radius:4px;margin:0 auto 6px}
+.spacebars figcaption{font-size:12px;color:var(--ink2);font-variant-numeric:tabular-nums}
+.panel{background:var(--s1);border-radius:12px;padding:20px;margin-top:16px}
+button{font-family:inherit;cursor:pointer;border:none}
+.btn-accent{background:var(--accent);color:var(--on-accent);font-weight:600;font-size:15px;padding:12px 20px;border-radius:999px}
+.btn-ghost{background:var(--s2);color:var(--ink);font-weight:500;font-size:15px;padding:12px 20px;border-radius:999px}
+.lab{display:flex;gap:24px;align-items:flex-start;flex-wrap:wrap}
+.stage{position:relative;width:280px;height:120px;background:var(--s2);border-radius:12px;overflow:hidden}
+.springbox{position:absolute;left:12px;top:36px;width:48px;height:48px;border-radius:12px;background:var(--accent);will-change:transform}
+.springcard{width:150px;height:96px;border-radius:12px;background:var(--s3);display:flex;align-items:center;justify-content:center;font-weight:600;will-change:transform}
+svg.ic{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+svg.ic.fill{fill:currentColor;stroke:none}
+/* song rows */
+.songrow{display:flex;align-items:center;gap:12px;min-height:56px;padding:8px;border-radius:8px}
+.cover{width:48px;height:48px;border-radius:8px;flex:none;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;color:rgba(20,10,0,.55);position:relative;overflow:hidden}
+.songmain{flex:1;min-width:0}
+.songtitle{font-size:15px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.songartist{font-size:13px;color:var(--ink2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.songrow.playing .songtitle{color:var(--accent)}
+.dur{font-size:12px;color:var(--ink2);font-variant-numeric:tabular-nums}
+.iconbtn{width:48px;height:48px;flex:none;background:none;color:var(--ink2);display:flex;align-items:center;justify-content:center;border-radius:50%}
+.eq{position:absolute;right:4px;bottom:4px;display:flex;gap:2px;align-items:flex-end;height:12px}
+.eq i{width:3px;background:var(--accent);border-radius:2px;animation:eq .9s ease-in-out infinite}
+.eq i:nth-child(2){animation-delay:.25s}.eq i:nth-child(3){animation-delay:.5s}
+@keyframes eq{0%,100%{height:4px}50%{height:12px}}
+.chips{display:flex;gap:8px;overflow:hidden}
+.chip{height:32px;padding:0 14px;border-radius:999px;background:var(--s2);color:var(--ink);font-size:13px;font-weight:500;display:inline-flex;align-items:center;white-space:nowrap}
+.chip.sel{background:var(--accent);color:var(--on-accent);font-weight:600}
+.playbtn{border-radius:50%;background:var(--accent);color:var(--on-accent);display:flex;align-items:center;justify-content:center;flex:none}
+.playbtn svg{width:55%;height:55%;fill:var(--on-accent)}
+.num{font-variant-numeric:tabular-nums;color:var(--faint);font-size:13px;font-weight:600;width:18px;text-align:right;flex:none}
+/* NowCard */
+.nowcard{background:var(--s2);border-radius:16px;padding:16px;display:flex;gap:16px;max-width:560px}
+.nowcard .cover{width:96px;height:96px;border-radius:12px;font-size:24px}
+.progress{height:3px;border-radius:2px;background:var(--s3);position:relative;margin:10px 0 4px}
+.progress i{position:absolute;left:0;top:0;bottom:0;width:38%;background:var(--accent);border-radius:2px}
+/* collection row */
+.collrow{display:flex;align-items:center;gap:14px;padding:10px 8px;border-radius:8px}
+.collrow .cover{width:56px;height:56px;border-radius:10px}
+/* sheet */
+.sheet{background:var(--s1);border-radius:20px;padding:16px;max-width:380px}
+.sheet .grab{width:36px;height:4px;border-radius:2px;background:var(--s3);margin:0 auto 14px}
+.sheet .act{display:flex;align-items:center;gap:14px;min-height:52px;font-size:15px;color:var(--ink)}
+/* phones */
+.phones{display:flex;gap:28px;flex-wrap:wrap;margin-top:16px}
+.phone{width:330px;height:712px;background:var(--base);border:1px solid var(--s3);border-radius:36px;padding:14px 12px;position:relative;flex:none;overflow:hidden}
+.phone .scr{height:100%;display:flex;flex-direction:column;position:relative}
+.p-head{display:flex;justify-content:space-between;align-items:center;margin:6px 4px 12px}
+.miniplayer{position:absolute;left:4px;right:4px;bottom:64px;background:var(--s2);border-radius:12px;min-height:64px;display:flex;align-items:center;gap:10px;padding:8px;box-shadow:0 -10px 24px rgba(0,0,0,.45)}
+.miniplayer:before{content:"";position:absolute;top:0;left:12px;height:2px;width:38%;background:var(--accent);border-radius:2px}
+.bottomnav{position:absolute;left:0;right:0;bottom:0;height:56px;background:rgba(10,10,14,.96);display:flex}
+.bottomnav>div{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;color:var(--faint);font-size:10px;font-weight:600;letter-spacing:.4px}
+.bottomnav .on{color:var(--ink)}
+.bottomnav .dot{width:4px;height:4px;border-radius:50%;background:var(--accent)}
+.bottomnav svg.ic{width:22px;height:22px}
+.seek{height:4px;border-radius:2px;background:var(--s3);position:relative;margin:16px 0 6px}
+.seek i{position:absolute;left:0;top:0;bottom:0;width:38%;background:var(--ink);border-radius:2px}
+.seek b{position:absolute;left:38%;top:50%;width:12px;height:12px;border-radius:50%;background:var(--ink);transform:translate(-50%,-50%)}
+.controls{display:flex;align-items:center;justify-content:space-between;margin-top:16px;padding:0 4px}
+.controls .cbtn{background:none;color:var(--ink);display:flex;flex-direction:column;align-items:center;gap:3px}
+.controls .cbtn.active{color:var(--accent)}
+.controls .cdot{width:4px;height:4px;border-radius:50%;background:var(--accent)}
+.switch{width:40px;height:24px;border-radius:999px;background:var(--accent);position:relative;flex:none}
+.switch i{position:absolute;right:3px;top:3px;width:18px;height:18px;border-radius:50%;background:var(--on-accent)}
+footer{margin-top:56px;color:var(--faint);font-size:13px;line-height:19px}
+@media (max-width:420px){.phone{width:100%;height:680px}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute">
+  <symbol id="i-warn" viewBox="0 0 24 24"><path d="M12 4 2.8 20h18.4L12 4zM12 10v4.4M12 17.2v.3"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M7 4.8v14.4c0 .9 1 1.5 1.8 1L20 13a1.2 1.2 0 0 0 0-2L8.8 3.9C8 3.4 7 4 7 4.8z"/></symbol>
+  <symbol id="i-pause" viewBox="0 0 24 24"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></symbol>
+  <symbol id="i-next" viewBox="0 0 24 24"><path d="M5 5.5v13l9.5-6.5zM16.5 5H19v14h-2.5z"/></symbol>
+  <symbol id="i-prev" viewBox="0 0 24 24"><path d="M19 5.5v13L9.5 12zM7.5 5H5v14h2.5z"/></symbol>
+  <symbol id="i-shuffle" viewBox="0 0 24 24"><path d="M3 7h4l10 10h4m0 0-3-3m3 3-3 3M3 17h4l2.6-2.6M13.4 9.4 17 5h4m0 0-3-3m3 3-3 3"/></symbol>
+  <symbol id="i-repeat" viewBox="0 0 24 24"><path d="M17 2.5 20.5 6 17 9.5M20.5 6H8a4.5 4.5 0 0 0-4.5 4.5V12M7 21.5 3.5 18 7 14.5M3.5 18H16a4.5 4.5 0 0 0 4.5-4.5V12"/></symbol>
+  <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20.3S3.8 15.3 2.6 9.9C1.9 6.7 4 4 7 4c2 0 3.9 1.2 5 3 1.1-1.8 3-3 5-3 3 0 5.1 2.7 4.4 5.9-1.2 5.4-9.4 10.4-9.4 10.4z"/></symbol>
+  <symbol id="i-dots" viewBox="0 0 24 24"><circle cx="12" cy="5" r="1.4" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none"/><circle cx="12" cy="19" r="1.4" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-drag" viewBox="0 0 24 24"><g fill="currentColor" stroke="none"><circle cx="9" cy="6" r="1.4"/><circle cx="15" cy="6" r="1.4"/><circle cx="9" cy="12" r="1.4"/><circle cx="15" cy="12" r="1.4"/><circle cx="9" cy="18" r="1.4"/><circle cx="15" cy="18" r="1.4"/></g></symbol>
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="M4 11.5 12 4l8 7.5M6.5 10v9.5h11V10"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M16 16 21 21"/></symbol>
+  <symbol id="i-lib" viewBox="0 0 24 24"><path d="M5 4.5v15M5 4.5h13.5v15M5 19.5h13.5M9.5 4.5v15M14 7l4.2-1.2 3.3 12.4-4.2 1.2"/></symbol>
+  <symbol id="i-stats" viewBox="0 0 24 24"><path d="M4 20V10M9.5 20V4M15 20v-8M20.5 20V7"/></symbol>
+  <symbol id="i-chevd" viewBox="0 0 24 24"><path d="M5 9l7 7 7-7"/></symbol>
+  <symbol id="i-chevr" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-queue" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h9"/></symbol>
+  <symbol id="i-addq" viewBox="0 0 24 24"><path d="M4 6h12M4 12h12M4 18h7M18.5 14.5v7M15 18.5h7"/></symbol>
+  <symbol id="i-radio" viewBox="0 0 24 24"><circle cx="12" cy="12" r="1.8" fill="currentColor" stroke="none"/><path d="M8.8 8.8a4.6 4.6 0 0 0 0 6.4M15.2 8.8a4.6 4.6 0 0 1 0 6.4M6.2 6.2a8.4 8.4 0 0 0 0 11.6M17.8 6.2a8.4 8.4 0 0 1 0 11.6"/></symbol>
+  <symbol id="i-down" viewBox="0 0 24 24"><path d="M12 4v11m0 0 5-5m-5 5-5-5M5 20.5h14"/></symbol>
+  <symbol id="i-album" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="2.4"/></symbol>
+  <symbol id="i-lyric" viewBox="0 0 24 24"><path d="M5 5h14M5 10h9M5 15h12M5 20h7"/></symbol>
+  <symbol id="i-dev" viewBox="0 0 24 24"><rect x="3" y="5" width="13" height="10" rx="2"/><path d="M19.5 9.5v7M8 19.5h8"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+</svg>
+<div class="wrap">
+
+<header>
+  <div class="logo"><i></i><i></i><i></i><i></i></div>
+  <div>
+    <h1>Clai DS v3.1 — “Volt”</h1>
+    <p class="sub">Papan visual DESIGN-SYSTEM.md v3.1. Dibangun ulang dari nol memakai metode impeccable (anti AI-slop): dunia Volt — gelap netral, aksen Volt #B8F135, tipografi Space Grotesk, struktur player-first. Semua konten di halaman ini <b>contoh mockup</b>.</p>
+  </div>
+</header>
+
+<h2 class="disp">Warna</h2>
+<p class="sub">Netral diturunkan dari hue cokelat yang sama — teks sekunder tidak pernah abu-abu netral. Satu aksen per layar.</p>
+<div class="grid swatches">
+  <div class="sw" style="background:#0A0A0E"><b>bg/base</b><span>#0A0A0E</span></div>
+  <div class="sw" style="background:#121218"><b>bg/surface-1</b><span>#121218</span></div>
+  <div class="sw" style="background:#1B1B23"><b>bg/surface-2</b><span>#1B1B23</span></div>
+  <div class="sw" style="background:#26262F"><b>bg/surface-3</b><span>#26262F</span></div>
+  <div class="sw" style="background:#F4F6F1;color:#10130A"><b>ink/primary</b><span>#F4F6F1</span></div>
+  <div class="sw" style="background:#A8AEA4;color:#10130A"><b>ink/secondary</b><span>#A8AEA4</span></div>
+  <div class="sw" style="background:#B8F135;color:#10130A"><b>accent/main “Volt”</b><span>#B8F135</span></div>
+  <div class="sw" style="background:#9BD62A;color:#10130A"><b>accent/pressed</b><span>#9BD62A</span></div>
+  <div class="sw" style="background:#FF5C7A"><b>state/liked</b><span>#FF5C7A</span></div>
+  <div class="sw" style="background:#FF6B5E"><b>state/error</b><span>#FF6B5E</span></div>
+  <div class="sw" style="background:#FFB224;color:#10130A"><b>state/warning</b><span>#FFB224</span></div>
+</div>
+
+<h2 class="disp">Tipografi</h2>
+<p class="sub">Space Grotesk adalah wajah display-nya; Inter hanya melayani teks isi. Angka waktu selalu tabular.</p>
+<div class="typebox">
+  <div class="rowlabel"><span class="t-display">Selamat malam, Riyan</span><span class="micro">display · Space Grotesk · 28</span></div>
+  <div class="rowlabel"><span class="t-title">Lagu Contoh Yang Sedang Diputar</span><span class="micro">title · Space Grotesk · 20</span></div>
+  <div class="rowlabel"><span class="t-head">Antrian Berikutnya</span><span class="micro">headline · Inter · 17/600</span></div>
+  <div class="rowlabel"><span class="t-body">Judul lagu contoh yang agak panjang</span><span class="micro">body · Inter · 15</span></div>
+  <div class="rowlabel"><span class="t-cap">Nama artis contoh · 2026</span><span class="micro">caption · Inter · 13</span></div>
+  <div class="rowlabel"><span class="t-time">1:07 &nbsp;·&nbsp; −2:41 &nbsp;·&nbsp; 3:48</span><span class="micro">time · tabular</span></div>
+</div>
+
+<h2 class="disp">Spasi & Radius</h2>
+<p class="sub">Grid 4dp. Kartu radius 12–16; pil hanya untuk kontrol kecil. Kedalaman lewat tingkat tonal — bukan garis tepi + bayangan sekaligus.</p>
+<div class="spacebars">
+  <figure><div class="bar" style="width:8px;height:8px"></div><figcaption>4</figcaption></figure>
+  <figure><div class="bar" style="width:16px;height:16px"></div><figcaption>8</figcaption></figure>
+  <figure><div class="bar" style="width:24px;height:24px"></div><figcaption>12</figcaption></figure>
+  <figure><div class="bar" style="width:32px;height:32px"></div><figcaption>16</figcaption></figure>
+  <figure><div class="bar" style="width:40px;height:40px"></div><figcaption>20</figcaption></figure>
+  <figure><div class="bar" style="width:48px;height:48px"></div><figcaption>24</figcaption></figure>
+  <figure><div class="bar" style="width:64px;height:64px"></div><figcaption>32</figcaption></figure>
+  <figure><div class="bar" style="width:80px;height:64px"></div><figcaption>40</figcaption></figure>
+  <figure><div class="bar" style="width:96px;height:64px;border-radius:16px"></div><figcaption>48 · r16</figcaption></figure>
+</div>
+
+<h2 class="disp">Motion — Laboratorium Spring</h2>
+<p class="sub">Standar pemilik mengalahkan saran umum: semua gerak spring fisik (transform & opacity saja). Parameter persis dokumen — kemunculan 260/26, hero player 180/24, tekan 400/22.</p>
+<div class="panel lab">
+  <div>
+    <div class="stage"><div class="springbox" id="springBox"></div></div>
+    <p class="note">Spring kemunculan (260/26) — overshoot tipis saat mendarat.</p>
+  </div>
+  <div>
+    <div class="springcard" id="springCard">Ketuk saya</div>
+    <p class="note">Umpan balik tekan (400/22) + hero (180/24).</p>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:10px">
+    <button class="btn-accent" id="btnSpring">Jalankan spring</button>
+    <button class="btn-ghost" id="btnReset">Atur ulang</button>
+  </div>
+</div>
+
+<h2 class="disp">Komponen</h2>
+<p class="sub">Kartu Sedang Diputar adalah komponen tanda tangan v3 — hal pertama yang dilihat pengguna, menggantikan rak rekomendasi. Semua ikon di papan ini SVG yang digambar, bukan glyph.</p>
+
+<div class="nowcard" style="margin-top:16px">
+  <div class="cover" style="background:#E8C872">SC</div>
+  <div class="songmain">
+    <div class="songtitle" style="font-size:17px;font-weight:600">Lagu Contoh Yang Sedang Diputar</div>
+    <div class="songartist">Artis Contoh Lain · Album Contoh B</div>
+    <div class="progress"><i></i></div>
+    <div style="display:flex;justify-content:space-between"><span class="t-time">1:34</span><span class="t-time">−2:31</span></div>
+    <div style="display:flex;align-items:center;gap:6px;margin-top:6px;color:var(--ink)">
+      <span class="iconbtn" style="width:40px;height:40px"><svg class="ic fill" style="width:20px;height:20px"><use href="#i-prev"/></svg></span>
+      <span class="playbtn" style="width:48px;height:48px"><svg><use href="#i-pause"/></svg></span>
+      <span class="iconbtn" style="width:40px;height:40px"><svg class="ic fill" style="width:20px;height:20px"><use href="#i-next"/></svg></span>
+      <span style="flex:1"></span>
+      <svg class="ic" style="width:22px;height:22px;color:var(--liked);fill:var(--liked)"><use href="#i-heart"/></svg>
+    </div>
+  </div>
+</div>
+<p class="note">NowCard — surface-2, radius 16, tanpa garis tepi. Ketuk badannya membuka Player.</p>
+
+<div class="panel" style="max-width:560px">
+  <span class="micro">Baris Lagu — normal</span>
+  <div class="songrow" style="margin-top:6px">
+    <div class="cover" style="background:#D98CB3">C1</div>
+    <div class="songmain"><div class="songtitle">Judul Lagu Contoh Satu</div><div class="songartist">Artis Contoh</div></div>
+    <span class="dur">3:48</span>
+    <button class="iconbtn" aria-label="Menu lagu"><svg class="ic"><use href="#i-dots"/></svg></button>
+  </div>
+  <span class="micro">Baris Lagu — sedang diputar</span>
+  <div class="songrow playing">
+    <div class="cover" style="background:#8FD0C5">C2<div class="eq"><i></i><i></i><i></i></div></div>
+    <div class="songmain"><div class="songtitle">Lagu Contoh Yang Sedang Diputar</div><div class="songartist">Artis Contoh Lain</div></div>
+    <span class="dur">4:05</span>
+    <button class="iconbtn" aria-label="Menu lagu"><svg class="ic"><use href="#i-dots"/></svg></button>
+  </div>
+  <span class="micro">Baris Antrian Berikutnya — nomor urut memang informasi</span>
+  <div class="songrow">
+    <span class="num">1</span>
+    <div class="cover" style="background:#E8C872">Q1</div>
+    <div class="songmain"><div class="songtitle">Lagu Antrian Contoh Satu</div><div class="songartist">Artis Contoh</div></div>
+    <span class="dur">3:12</span>
+  </div>
+  <span class="micro">Baris Koleksi — lebar asimetris, bukan grid kartu</span>
+  <div class="collrow">
+    <div class="cover" style="background:#B5E48C">PL</div>
+    <div class="songmain"><div class="songtitle" style="font-weight:600">Playlist Contoh Milikmu</div><div class="songartist">24 lagu · terakhir diputar kemarin</div></div>
+    <svg class="ic" style="color:var(--faint)"><use href="#i-chevr"/></svg>
+  </div>
+  <div style="height:10px"></div>
+  <span class="micro">Chip Saring</span>
+  <div class="chips" style="margin-top:8px">
+    <span class="chip sel">Semua</span><span class="chip">Lagu</span><span class="chip">Album</span><span class="chip">Artis</span><span class="chip">Playlist</span>
+  </div>
+</div>
+
+<div style="height:16px"></div>
+<div class="sheet">
+  <div class="grab"></div>
+  <div style="display:flex;gap:12px;align-items:center;margin-bottom:8px">
+    <div class="cover" style="background:#D98CB3">C1</div>
+    <div class="songmain"><div class="songtitle">Judul Lagu Contoh Satu</div><div class="songartist">Artis Contoh</div></div>
+  </div>
+  <span class="micro">Lembar Menu Konteks — urutan aksi baku</span>
+  <div class="act" style="margin-top:6px"><svg class="ic fill" style="width:22px;height:22px"><use href="#i-play"/></svg>Putar Berikutnya</div>
+  <div class="act"><svg class="ic"><use href="#i-addq"/></svg>Tambah ke Antrian</div>
+  <div class="act"><svg class="ic" style="color:var(--accent)"><use href="#i-radio"/></svg>Mulai Radio Lagu</div>
+  <div class="act"><svg class="ic" style="color:var(--liked);fill:var(--liked)"><use href="#i-heart"/></svg>Simpan ke Koleksi</div>
+  <div class="act"><svg class="ic"><use href="#i-queue"/></svg>Tambah ke Playlist</div>
+  <div class="act"><svg class="ic"><use href="#i-down"/></svg>Unduh</div>
+  <div class="act"><svg class="ic"><use href="#i-album"/></svg>Buka Album</div>
+  <div class="act" style="color:var(--error)"><svg class="ic"><use href="#i-x"/></svg>Hapus dari Antrian — hanya pada varian dari layar Antrian, selalu terakhir</div>
+</div>
+
+<h2 class="disp">Mockup Layar</h2>
+<p class="sub">Beranda player-first, Player yang dipimpin tipografi, Antrian dengan seksi Putar Otomatis. Sampul = blok warna berinisial (placeholder berpola).</p>
+<div class="phones">
+
+  <!-- BERANDA -->
+  <div class="phone"><div class="scr">
+    <div class="p-head"><span class="disp" style="font-size:21px;font-weight:600">Selamat malam</span><span style="width:32px;height:32px;border-radius:50%;background:var(--s3);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--accent)">R</span></div>
+    <div class="nowcard" style="max-width:none;padding:14px">
+      <div class="cover" style="background:#8FD0C5;width:84px;height:84px;font-size:20px">SC<div class="eq"><i></i><i></i><i></i></div></div>
+      <div class="songmain">
+        <div class="songtitle" style="font-weight:600">Lagu Contoh Yang Sedang Diputar</div>
+        <div class="songartist">Artis Contoh Lain</div>
+        <div class="progress"><i></i></div>
+        <div style="display:flex;align-items:center;gap:4px;color:var(--ink)">
+          <span class="playbtn" style="width:40px;height:40px"><svg><use href="#i-pause"/></svg></span>
+          <span class="iconbtn" style="width:40px;height:40px"><svg class="ic fill" style="width:19px;height:19px"><use href="#i-next"/></svg></span>
+          <span style="flex:1"></span><span class="t-time">1:34 / 4:05</span>
+        </div>
+      </div>
+    </div>
+    <p class="t-head" style="margin:26px 0 6px">Antrian Berikutnya</p>
+    <div class="songrow"><span class="num">1</span><div class="cover" style="background:#E8C872">Q1</div><div class="songmain"><div class="songtitle">Lagu Antrian Contoh Satu</div><div class="songartist">Artis Contoh</div></div><span class="dur">3:12</span></div>
+    <div class="songrow"><span class="num">2</span><div class="cover" style="background:#D98CB3">Q2</div><div class="songmain"><div class="songtitle">Lagu Antrian Contoh Dua</div><div class="songartist">Artis Lain</div></div><span class="dur">2:57</span></div>
+    <div class="songrow"><span class="num">3</span><div class="cover" style="background:#9DB4E8">Q3</div><div class="songmain"><div class="songtitle">Lagu Antrian Contoh Tiga</div><div class="songartist">Artis Contoh</div></div><span class="dur">4:20</span></div>
+    <p class="t-head" style="margin:22px 0 6px">Koleksi Kamu</p>
+    <div class="collrow"><div class="cover" style="background:#B5E48C">PL</div><div class="songmain"><div class="songtitle" style="font-weight:600">Playlist Contoh Milikmu</div><div class="songartist">24 lagu · diputar kemarin</div></div><svg class="ic" style="color:var(--faint)"><use href="#i-chevr"/></svg></div>
+    <div class="collrow"><div class="cover" style="background:#F2A65A">LS</div><div class="songmain"><div class="songtitle" style="font-weight:600">Lagu Tersimpan</div><div class="songartist">132 lagu</div></div><svg class="ic" style="color:var(--faint)"><use href="#i-chevr"/></svg></div>
+    <div style="display:flex;align-items:center;gap:8px;background:var(--s2);border-radius:10px;padding:9px 12px;margin-top:auto;margin-bottom:66px;position:relative;z-index:5;color:var(--ink2);font-size:12.5px"><svg class="ic" style="width:17px;height:17px;color:var(--warning)"><use href="#i-warn"/></svg>Kamu offline — menampilkan unduhan &amp; file lokal</div>
+    <div class="bottomnav">
+      <div class="on"><svg class="ic"><use href="#i-home"/></svg>Beranda<span class="dot"></span></div>
+      <div><svg class="ic"><use href="#i-search"/></svg>Cari</div>
+      <div><svg class="ic"><use href="#i-lib"/></svg>Koleksi</div>
+      <div><svg class="ic"><use href="#i-stats"/></svg>Statistik</div>
+    </div>
+  </div></div>
+
+  <!-- PLAYER -->
+  <div class="phone"><div class="scr">
+    <div class="p-head"><svg class="ic" style="color:var(--ink2)"><use href="#i-chevd"/></svg><span class="t-cap">Album Contoh B</span><svg class="ic" style="color:var(--ink2)"><use href="#i-dots"/></svg></div>
+    <div class="cover" style="background:#8FD0C5;width:176px;height:176px;border-radius:16px;font-size:44px;margin-top:8px">SC</div>
+    <div style="display:flex;align-items:flex-start;gap:12px;margin-top:22px">
+      <div style="flex:1">
+        <div class="disp" style="font-size:27px;line-height:33px;font-weight:600">Lagu Contoh Yang<br>Sedang Diputar</div>
+        <div style="font-size:16px;color:var(--ink2);margin-top:6px">Artis Contoh Lain</div>
+      </div>
+      <span class="iconbtn" style="width:48px;height:48px;flex:none" aria-label="Suka"><svg class="ic" style="color:var(--liked);fill:var(--liked);width:26px;height:26px"><use href="#i-heart"/></svg></span>
+    </div>
+    <div class="seek"><i></i><b></b></div>
+    <div style="display:flex;justify-content:space-between"><span class="t-time">1:34</span><span class="t-time">−2:31</span></div>
+    <div class="controls">
+      <span class="cbtn active"><svg class="ic"><use href="#i-shuffle"/></svg><span class="cdot"></span></span>
+      <span class="cbtn"><svg class="ic fill" style="width:27px;height:27px"><use href="#i-prev"/></svg></span>
+      <span class="playbtn" style="width:64px;height:64px"><svg><use href="#i-pause"/></svg></span>
+      <span class="cbtn"><svg class="ic fill" style="width:27px;height:27px"><use href="#i-next"/></svg></span>
+      <span class="cbtn"><svg class="ic"><use href="#i-repeat"/></svg></span>
+    </div>
+    <div style="display:flex;justify-content:space-between;margin-top:26px;padding:0 2px;color:var(--ink2);font-size:13px">
+      <span style="display:flex;gap:6px;align-items:center"><svg class="ic" style="width:20px;height:20px"><use href="#i-lyric"/></svg>Lirik</span>
+      <span style="display:flex;gap:6px;align-items:center"><svg class="ic" style="width:20px;height:20px"><use href="#i-queue"/></svg>Antrian</span>
+      <span style="display:flex;gap:6px;align-items:center"><svg class="ic" style="width:20px;height:20px"><use href="#i-dev"/></svg>Perangkat</span>
+    </div>
+    <div style="margin-top:30px;background:var(--s1);border-radius:12px;padding:14px">
+      <div class="micro" style="margin-bottom:6px">Putar Otomatis aktif</div>
+      <div style="font-size:13px;color:var(--ink2);line-height:19px">Setelah album ini habis, Clai menyambung lagu terkait — musik tidak berhenti di tengah jalan.</div>
+    </div>
+  </div></div>
+
+  <!-- ANTRIAN -->
+  <div class="phone" style="height:744px"><div class="scr">
+    <div class="p-head"><span class="disp" style="font-size:20px;font-weight:600">Antrian</span><svg class="ic" style="color:var(--ink2)"><use href="#i-x"/></svg></div>
+    <div class="t-cap" style="margin:-6px 0 8px">7 trek · 24 menit total</div>
+    <div style="display:flex;align-items:center;gap:8px;background:var(--s1);border-radius:10px;padding:9px 12px;margin-bottom:14px;color:var(--faint);font-size:13px"><svg class="ic" style="width:18px;height:18px"><use href="#i-search"/></svg>Saring antrean ini… <span style="margin-left:auto" class="micro">muncul bila &gt; 50 trek</span></div>
+    <span class="micro">Sedang Diputar</span>
+    <div class="songrow playing" style="margin:6px 0 12px">
+      <div class="cover" style="background:#8FD0C5">C2<div class="eq"><i></i><i></i><i></i></div></div>
+      <div class="songmain"><div class="songtitle">Lagu Contoh Yang Sedang Diputar</div><div class="songartist">Artis Contoh Lain</div></div>
+      <span class="dur">4:05</span>
+    </div>
+    <span class="micro">Berikutnya</span>
+    <div style="margin:6px 0 12px">
+      <div class="songrow"><div class="cover" style="background:#E8C872">Q1</div><div class="songmain"><div class="songtitle">Lagu Antrian Contoh Satu</div><div class="songartist">Artis Contoh</div></div><svg class="ic" style="color:var(--faint);width:20px;height:20px"><use href="#i-drag"/></svg></div>
+      <div class="songrow"><div class="cover" style="background:#D98CB3">Q2</div><div class="songmain"><div class="songtitle">Lagu Antrian Contoh Dua</div><div class="songartist">Artis Lain</div></div><svg class="ic" style="color:var(--faint);width:20px;height:20px"><use href="#i-drag"/></svg></div>
+    </div>
+    <span class="micro">Lanjutan — Album Contoh B</span>
+    <div style="margin:6px 0 12px">
+      <div class="songrow"><div class="cover" style="background:#9DB4E8">L1</div><div class="songmain"><div class="songtitle">Lagu Lanjutan Contoh Satu</div><div class="songartist">Artis Contoh</div></div><svg class="ic" style="color:var(--faint);width:20px;height:20px"><use href="#i-drag"/></svg></div>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <span class="micro">Putar Otomatis — karena kamu memutar lagu ini</span>
+      <span class="switch"><i></i></span>
+    </div>
+    <div style="margin-top:6px">
+      <div class="songrow"><div class="cover" style="background:#D98CB3">A1</div><div class="songmain"><div class="songtitle" style="color:var(--ink2)">Lagu Sambungan Contoh Satu</div><div class="songartist">Artis Terkait</div></div><span class="micro" style="color:var(--accent)">Auto</span></div>
+    </div>
+    <div class="miniplayer">
+      <div class="cover" style="background:#8FD0C5;width:48px;height:48px">C2</div>
+      <div class="songmain"><div class="songtitle">Lagu Contoh Yang Sedang Diputar</div><div class="songartist">Artis Contoh Lain</div></div>
+      <span class="playbtn" style="width:40px;height:40px"><svg><use href="#i-pause"/></svg></span>
+    </div>
+    <div class="bottomnav">
+      <div class="on"><svg class="ic"><use href="#i-home"/></svg>Beranda<span class="dot"></span></div>
+      <div><svg class="ic"><use href="#i-search"/></svg>Cari</div>
+      <div><svg class="ic"><use href="#i-lib"/></svg>Koleksi</div>
+      <div><svg class="ic"><use href="#i-stats"/></svg>Statistik</div>
+    </div>
+  </div></div>
+</div>
+
+<footer>
+  Sumber kebenaran: DESIGN-SYSTEM.md v3.1 (folder aplikasi-musik) — metode impeccable, dunia Volt; v3.1 = audit Phase 4 vs Spotube (Bab 10 DS). Mengubah token = ubah dokumen dulu, lalu kode, lalu papan ini.<br>
+  Logo, ikon SVG, dan tata letak digambar sendiri untuk Clai. Konten lagu/artis seluruhnya contoh mockup. Papan v1 “Volt” digantikan total, bukan ditambal.
+</footer>
+</div>
+
+<script>
+function makeSpring(el, stiffness, damping, onUpdate){
+  let x=0, v=0, target=0, raf=null;
+  function step(){
+    const f = -stiffness*(x-target) - damping*v;
+    v += f/60; x += v/60;
+    onUpdate(x);
+    if (Math.abs(v) > 0.001 || Math.abs(x-target) > 0.001){ raf = requestAnimationFrame(step); }
+    else { x = target; onUpdate(x); raf = null; }
+  }
+  return {
+    to(t){ target = t; if(!raf) raf = requestAnimationFrame(step); },
+    reset(){ if(raf) cancelAnimationFrame(raf); raf=null; x=0; v=0; target=0; onUpdate(0); }
+  };
+}
+const box = document.getElementById('springBox');
+const boxSpring = makeSpring(box, 260, 26, x => { box.style.transform = 'translateX(' + (x*200) + 'px)'; });
+document.getElementById('btnSpring').addEventListener('click', () => boxSpring.to(1));
+document.getElementById('btnReset').addEventListener('click', () => boxSpring.reset());
+const card = document.getElementById('springCard');
+const cardSpring = makeSpring(card, 180, 24, x => { card.style.transform = 'scale(' + (0.96 + x*0.14) + ')'; });
+let cardState = 0;
+card.addEventListener('click', () => { cardState = cardState ? 0 : 1; cardSpring.to(cardState); });
+</script>
+</body>
+</html>
